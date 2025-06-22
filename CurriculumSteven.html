@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CV Steven Guillen</title>
+    <!-- Librería html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        /* Variables CSS */
+        :root {
+            --primary: #2563eb;
+            --secondary: #059669;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --accent: #d97706;
+            --text: #334155;
+            --bg: #f1f5f9;
+        }
+
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilos generales */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        /* Layout principal */
+        .sidebar,
+        .main-content {
+            background: #fff;
+            border-radius: 1rem;
+            padding: 2.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+                        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+        }
+
+        /* Foto de perfil */
+        .profile-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* clave para que la imagen no se desborde */
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+            transition: all 0.3s ease;
+        }
+
+            .profile-photo:hover {
+                transform: scale(1.05);
+                box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.3);
+            }
+
+            .profile-photo img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+
+
+        /* Información personal */
+        .name {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .title {
+            font-size: 1.2rem;
+            text-align: center;
+            color: var(--text);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        /* Información de contacto */
+        .contact-info {
+            margin-bottom: 2.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .contact-item:hover {
+            background-color: rgba(37, 99, 235, 0.05);
+            transform: translateX(5px);
+        }
+
+        .contact-icon {
+            width: 2rem;
+            height: 2rem;
+            margin-right: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        /* Secciones */
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            position: relative;
+            color: var(--dark);
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            width: 3rem;
+            height: 0.25rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 0.125rem;
+        }
+
+        /* Habilidades */
+        .skill-item {
+            margin-bottom: 1.25rem;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .skill-bar {
+            height: 0.5rem;
+            background: #e2e8f0;
+            border-radius: 0.25rem;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 0.25rem;
+            transition: width 1.5s ease;
+        }
+
+        /* Experiencia y educación */
+        .experience-item,
+        .education-item {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: #fff;
+            border-radius: 0.75rem;
+            border-left: 0.25rem solid var(--primary);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .experience-item:hover,
+        .education-item:hover {
+            transform: translateY(-0.25rem);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .job-title,
+        .degree-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .company,
+        .institution {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .date {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            background: #f1f5f9;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+
+        .description {
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* Idiomas */
+        .languages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+
+        .language-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(37, 99, 235, 0.05);
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .language-item:hover {
+            transform: translateY(-0.25rem);
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .language-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .language-level {
+            font-size: 0.9rem;
+            color: var(--primary);
+        }
+
+        /* Cualidades e intereses */
+        .qualities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quality-tag {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .interest-tag {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .quality-tag:hover,
+        .interest-tag:hover {
+            transform: scale(1.05);
+        }
+
+        /* Botón de descarga */
+        .download-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #fff;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-0.125rem);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+        }
+
+        .download-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Formulario de contacto */
+        .contact-form {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #fff;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form h2 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .contact-form button {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .contact-form button:hover {
+            background: var(--accent);
+        }
+
+        /* Estilos específicos para PDF */
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .container {
+                padding: 0;
+                max-width: none;
+                grid-template-columns: 1fr 2fr;
+                gap: 1rem;
+            }
+            
+            .sidebar,
+            .main-content {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            
+            .contact-form {
+                display: none;
+            }
+            
+            .download-btn {
+                display: none;
+            }
+        }
+
+        /* Media queries */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .sidebar,
+            .main-content {
+                padding: 1.5rem;
+            }
+
+            .profile-photo {
+                width: 120px;
+                height: 120px;
+                font-size: 2rem;
+            }
+
+            .name {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+            }
+
+            .languages {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .languages {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="cv-content">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="profile-photo">
+                <img id="StevenPerfil" src="STEVENFOTO.jpg" alt="Foto de perfil">
+            </div>
+
+            <h1 class="name">Steven Eduardo Guillen Alfaro</h1>
+            <p class="title">Supervisor de Calidad de Producción</p>
+
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <span>meidoncito@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📱</div>
+                    <span>+506 8334-4078</span>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <span>Cartago, Costa Rica</span>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">💼</div>
+                    <span>www.linkedin.com/in/steven-guillen-889067268</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Habilidades Técnicas</h2>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Java</span>
+                        <span>40%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 40%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Python</span>
+                        <span>30%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 30%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>Desarrollo Web</span>
+                        <span>35%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 35%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">
+                        <span>SQL Server</span>
+                        <span>60%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 60%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Idiomas</h2>
+                <div class="languages">
+                    <div class="language-item">
+                        <div class="language-name">Español</div>
+                        <div class="language-level">Nativo</div>
+                    </div>
+                    <div class="language-item">
+                        <div class="language-name">Inglés</div>
+                        <div class="language-level">Básico</div>
+                    </div>
+                    <div class="language-item">
+                        <div class="language-name">Francés</div>
+                        <div class="language-level">Básico</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="download-btn" onclick="downloadPDF()" id="downloadBtn">
+                Descargar CV
+            </button>
+        </aside>
+        
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <div class="section">
+                <h2 class="section-title">Perfil Profesional</h2>
+                <p class="description">
+                    Profesional con más de 6 años de experiencia en producción, manejo de inventarios y control de calidad,
+                    complementado con formación en Tecnologías de la Información. Mi trayectoria comenzó como operario de
+                    producción, ascendiendo progresivamente a supervisor de calidad gracias a mi capacidad para identificar
+                    oportunidades de mejora e implementar nuevos métodos de trabajo. Actualmente combino mi experiencia
+                    operativa con estudios en desarrollo de software, aplicación de conocimientos en Java, Python y bases
+                    de datos. Capacidad destacada para liderar equipos, trabajar bajo presión y asegurar la calidad en
+                    procesos productivos. Comprometido con el aprendizaje continuo y la aplicación de tecnología para
+                    optimizar operaciones.
+                </p>
+                <div class="qualities">
+                    <span class="quality-tag">Liderazgo</span>
+                    <span class="quality-tag">Toma de Decisiones</span>
+                    <span class="quality-tag">Emprendimiento</span>
+                    <span class="quality-tag">Compañerismo</span>
+                    <span class="quality-tag">Trabajo bajo presión</span>
+                    <span class="quality-tag">Gestión de equipo</span>
+                    <span class="quality-tag">Mejora continua</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Experiencia Profesional</h2>
+
+                <div class="experience-item">
+                    <h3 class="job-title">Supervisor de Control de Calidad de Producción</h3>
+                    <p class="company">Casagri</p>
+                    <span class="date">2023 - Presente</span>
+                    <p class="description">
+                        • Responsable del control de calidad en línea de producción, asegurando el cumplimiento de estándares establecidos.<br>
+                        • Implementación de procedimientos de inspección para reducir defectos en producción en un 25%.<br>
+                        • Capacitación continua al personal en protocolos de calidad y seguridad industrial.<br>
+                        • Desarrollo de indicadores de desempeño y reportes para la dirección.
+                    </p>
+                </div>
+
+                <div class="experience-item">
+                    <h3 class="job-title">Bodeguero Central</h3>
+                    <p class="company">Casagri</p>
+                    <span class="date">2019 - 2023</span>
+                    <p class="description">
+                        • Gestión completa de inventarios en bodega principal, con más de 500 SKU bajo responsabilidad.<br>
+                        • Implementación de sistema de codificación que mejoró la precisión en inventarios a 99.8%.<br>
+                        • Optimización de disposición de productos, reduciendo tiempos de búsqueda en 30%.<br>
+                        • Coordinación con departamentos de compras y producción para asegurar disponibilidad de materiales.
+                    </p>
+                </div>
+
+                <div class="experience-item">
+                    <h3 class="job-title">Operario de Producción</h3>
+                    <p class="company">Casagri</p>
+                    <span class="date">2018 - 2019</span>
+                    <p class="description">
+                        • Operario en línea de producción, cumpliendo metas de productividad y calidad.<br>
+                        • Capacitación en múltiples estaciones de trabajo, destacando por versatilidad.<br>
+                        • Implementación de sugerencias de mejora que aumentaron eficiencia en 15%.
+                    </p>
+                </div>
+
+                <div class="experience-item">
+                    <h3 class="job-title">Operador de Producción</h3>
+                    <p class="company">Baxter</p>
+                    <span class="date">2017 - 2019</span>
+                    <p class="description">
+                        • Ensamblaje de productos médicos intravenosos bajo estrictos protocolos de calidad.<br>
+                        • Documentación detallada de procesos según requerimientos de la industria médica.<br>
+                        • Participación en auditorías de calidad y proceso de certificaciones.
+                    </p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Educación</h2>
+
+                <div class="education-item">
+                    <h3 class="degree-title">Tecnología de Información</h3>
+                    <p class="institution">Colegio Universitario de Cartago (CUC)</p>
+                    <span class="date">2019 - Presente</span>
+                    <p class="description">
+                        Cursando actualmente con énfasis en desarrollo de software. Conocimientos en programación Java,
+                        Python, bases de datos SQL y desarrollo web básico.
+                    </p>
+                </div>
+
+                <div class="education-item">
+                    <h3 class="degree-title">Bachillerato en Educación Media</h3>
+                    <p class="institution">Colegio Nocturno de Cartago</p>
+                    <span class="date">2015 - 2017</span>
+                </div>
+
+                <div class="education-item">
+                    <h3 class="degree-title">Educación Primaria</h3>
+                    <p class="institution">Escuela Jesús Jiménez</p>
+                    <span class="date">2010 - 2015</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Intereses Profesionales</h2>
+                <div class="interests">
+                    <span class="interest-tag">Desarrollo Web</span>
+                    <span class="interest-tag">Big Data</span>
+                    <span class="interest-tag">Bases de Datos</span>
+                    <span class="interest-tag">Análisis de Datos</span>
+                    <span class="interest-tag">Programación Java</span>
+                    <span class="interest-tag">Automatización</span>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <h2 class="section-title">Contacto Directo</h2>
+                <form onsubmit="handleContact(event)">
+                    <input type="text" name="nombre" placeholder="Tu Nombre" required>
+                    <input type="email" name="email" placeholder="Tu Email" required>
+                    <textarea name="mensaje" placeholder="Tu Mensaje" rows="4" required></textarea>
+                    <button type="submit">Enviar Mensaje</button>
+                </form>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Función para descargar el CV como PDF
+        async function downloadPDF() {
+            const button = document.getElementById('downloadBtn');
+            const originalText = button.innerHTML;
+
+            button.disabled = true;
+            button.innerHTML = 'Generando PDF...';
+
+            try {
+                const element = document.getElementById('cv-content');
+
+                // Clon del contenido visible
+                const clone = element.cloneNode(true);
+                clone.style.visibility = 'hidden';
+                clone.style.position = 'fixed';
+                clone.style.top = '0';
+                clone.style.left = '0';
+                clone.style.backgroundColor = '#fff';
+                clone.style.width = '210mm';
+                clone.style.padding = '20px';
+
+                document.body.appendChild(clone);
+
+                // Espera más para asegurar render (especial si hay imágenes)
+                await new Promise(r => setTimeout(r, 1500));
+
+                const opt = {
+                    margin: 0,
+                    filename: 'Mi_CV.pdf',
+                    image: { type: 'jpeg', quality: 1 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+
+                await html2pdf().set(opt).from(clone).save();
+                document.body.removeChild(clone);
+            } catch (err) {
+                console.error('Error al generar PDF:', err);
+                alert('Hubo un error al generar el PDF.');
+            } finally {
+                button.disabled = false;
+                button.innerHTML = originalText;
+            }
+        }
+
+        
+        // Función para manejar el formulario de contacto
+        function handleContact(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                nombre: formData.get('nombre'),
+                email: formData.get('email'),
+                mensaje: formData.get('mensaje')
+            };
+
+            alert(`Mensaje enviado:\nNombre: ${data.nombre}\nEmail: ${data.email}\nMensaje: ${data.mensaje}`);
+            event.target.reset();
+        }
+}
+        
+        // Animación de las barras de habilidades al cargar la página
+        window.addEventListener('load', function () {
+            const skillBars = document.querySelectorAll('.skill-progress');
+            skillBars.forEach((bar, index) => {
+                setTimeout(() => {
+                    bar.style.width = bar.style.width; 
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>
